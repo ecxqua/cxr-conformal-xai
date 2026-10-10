@@ -1,0 +1,26 @@
+# Базовый ML и PyTorch (с поддержкой CUDA/GPU)
+torch>=2.0.0
+torchvision>=0.15.0
+torchaudio
+
+# Обработка данных и вычисления
+numpy>=1.24.0
+pandas>=2.0.0
+scikit-learn>=1.2.0
+
+# Медицинские предобученные модели и утилиты
+torchxrayvision>=1.2.0
+
+# Конформное предсказание (квантификация неопределенности)
+mapie>=0.8.0
+
+# Интерпретируемость и визуализация (XAI)
+grad-cam>=1.5.0
+matplotlib>=3.7.0
+seaborn>=0.12.0
+Pillow>=9.5.0
+opencv-python-headless>=4.7.0
+
+# Среда разработки
+jupyter>=1.0.0
+tqdm>=4.65.0
