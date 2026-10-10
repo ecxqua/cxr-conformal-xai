@@ -36,12 +36,28 @@ cxr-conformal-xai/
 ## 📂 Data Contract (Формат передачи данных)
 
 Инференс модели сохраняется в `outputs/predictions.csv` со следующими столбцами:
-- `image_id`: имя файла рентгенограммы;
-- `split`: выборка (`calib` или `test`);
-- `true_label`: метка класса (0 — норма, 1 — патология);
-- `prob_normal`: прогнозируемая вероятность нормы;
-- `prob_pneumonia`: прогнозируемая вероятность патологии.
+- `image_id`: имя файла рентгенограммы (например, `IM-0140-0001.jpeg`, `person1_bacteria_1.jpeg`);
+- `split`: выборка (`calib` — для калибровки квантиля $\hat{q}$, `test` — для расчета предиктивных множеств $C(x)$ и построения карт Grad-CAM);
+- `true_label`: целочисленная метка истинного класса:
+  - `0`: норма (`NORMAL`)
+  - `1`: бактериальная пневмония (`BACTERIAL`)
+  - `2`: вирусная пневмония (`VIRAL`)
+- `prob_normal`: прогнозируемая вероятность нормы ($P(\text{NORMAL}) \in [0.0, 1.0]$);
+- `prob_bacterial`: прогнозируемая вероятность бактериальной пневмонии ($P(\text{BACTERIAL}) \in [0.0, 1.0]$);
+- `prob_viral`: прогнозируемая вероятность вирусной пневмонии ($P(\text{VIRAL}) \in [0.0, 1.0]$).
 
+> **Валидация распределения:** для каждой записи сумма вероятностей должна удовлетворять условию:  
+> `prob_normal + prob_bacterial + prob_viral == 1.0` (выход слоя Softmax).
+
+### Пример `outputs/predictions.csv`:
+```csv
+image_id,split,true_label,prob_normal,prob_bacterial,prob_viral
+IM-0140-0001.jpeg,calib,0,0.8921,0.0714,0.0365
+person1_bacteria_1.jpeg,calib,1,0.0312,0.8145,0.1543
+person2_virus_4.jpeg,calib,2,0.1104,0.3241,0.5655
+IM-0145-0001.jpeg,test,0,0.9240,0.0410,0.0350
+person10_bacteria_42.jpeg,test,1,0.0150,0.7200,0.2650
+person15_virus_89.jpeg,test,2,0.0820,0.4430,0.4750
 ---
 
 ## 🚀 Быстрый старт и установка
