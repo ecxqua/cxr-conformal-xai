@@ -58,6 +58,10 @@ venv.bak/
 # Outputs / experiment results (keep folder structure)
 /outputs/*
 !/outputs/.gitkeep
+!/outputs/*.png
+!/outputs/*.json
+!/outputs/predictions.csv
+!/outputs/test_conformal_xai_metrics.csv
 
 # IDEs and Editors
 .vscode/

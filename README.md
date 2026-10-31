@@ -128,3 +128,34 @@ pip install -r requirements.txt
   - `conformal_classification_metrics(...)`: сводный отчет по всем ключевым метрикам калибровки.
   - `cam_conformal_alignment_score(...)`: метрика пространственного согласия / расхождения между Grad-CAM картами классов внутри предиктивного множества.
 
+
+---
+
+## 🔬 Неделя 3: Статистический анализ связки конформных множеств и Grad-CAM
+
+### Результаты статистической проверки гипотезы:
+1. **Сравнение площади внимания ($S_{\mathrm{CAM}}, \tau = 0.2$):**
+   - Группа $|C(x)| = 1$ (уверенный диагноз, $N = 524$): $0.6003 \pm 0.1951$ (медиана 0.6531)
+   - Группа $|C(x)| \ge 2$ (сомнительный диагноз, $N = 355$): $0.4917 \pm 0.2080$ (медиана 0.4898)
+   - **Абсолютная разница ($\Delta$):** $-0.1085$ (относительное изменение: **$-18.08\%$**)
+   - **Размер эффекта (Cohen's $d$):** $-0.5417$ (умеренный/выраженный эффект)
+   - **Критерий Уэлча (Welch's t-test):** $t = -7.7842, p = 2.42 \times 10^{-14}$
+   - **Критерий Манна-Уитни (Mann-Whitney U):** $U = 63086.5, p = 5.42 \times 10^{-16}$
+   - **Ранговая корреляция Спирмена:** $r_s = -0.2958, p = 3.26 \times 10^{-19}$
+
+2. **Сравнение нормализованной пространственной энтропии ($H_{\mathrm{norm}}$):**
+   - Группа $|C(x)| = 1$: $2.6648 \pm 0.1521$
+   - Группа $|C(x)| \ge 2$: $2.6165 \pm 0.1787$
+   - **Критерий Манна-Уитни:** $U = 62402.5, p = 1.16 \times 10^{-16}$
+   - **Ранговая корреляция Спирмена:** $r_s = -0.3024, p = 4.81 \times 10^{-20}$
+
+### Артефакты Недели 3:
+- Ноутбук анализа: [`notebooks/03_statistical_analysis_week3.ipynb`](notebooks/03_statistical_analysis_week3.ipynb)
+- Модуль статистической оценки: [`src/stats_evaluation.py`](src/stats_evaluation.py)
+- Датасет метрик: [`outputs/test_conformal_xai_metrics.csv`](outputs/test_conformal_xai_metrics.csv)
+- Сводный отчет в JSON: [`outputs/statistical_summary_week3.json`](outputs/statistical_summary_week3.json)
+- Графики публикации:
+  - [`outputs/figure1_attention_area_comparison.png`](outputs/figure1_attention_area_comparison.png) — боксплот площади внимания
+  - [`outputs/figure2_spatial_entropy_comparison.png`](outputs/figure2_spatial_entropy_comparison.png) — скрипичная диаграмма энтропии
+  - [`outputs/figure3_multiclass_trends.png`](outputs/figure3_multiclass_trends.png) — динамика по размерам множеств $|C(x)| \in \{1, 2, 3\}$
+  - [`outputs/figure4_clinical_cases_panel.png`](outputs/figure4_clinical_cases_panel.png) — клиническая панель кейсов
