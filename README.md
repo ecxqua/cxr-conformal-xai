@@ -2,7 +2,6 @@
 
 Фреймворк для оценки неопределенности (Uncertainty Quantification) и объяснимого искусственного интеллекта (Explainable AI / Grad-CAM) в задачах анализа рентгенограмм органов грудной клетки (Chest X-Ray, CXR)
 
----
 
 ## 📌 Архитектура и структура проекта
 
@@ -11,7 +10,9 @@ cxr-conformal-xai/
 ├── data/                             # Датасеты (добавлены в .gitignore, тяжелые файлы не пушатся)
 ├── notebooks/                        # Ноутбуки для Colab / Jupyter
 │   ├── 01_baseline_inference.ipynb   # Зона Напарника: ResNet + вычисление logits/вероятностей
-│   └── 02_conformal_calibration.ipynb # Зона Тимлида: Conformal Prediction (MAPIE) + XAI (Grad-CAM)
+│   ├── 02_conformal_calibration.ipynb # Зона Тимлида: Conformal Prediction (MAPIE) + XAI (Grad-CAM)
+│   ├── 011_grad_cam.ipynb # Формирование карт внимания Grad-CAM
+│   └── 03_statistical_analysis_week3.ipynb # Зона Тимлида: статистический анализ результатов
 ├── src/                              # Переиспользуемый код и модули
 │   ├── __init__.py
 │   ├── conformal.py                  # Калибровка non-conformity scores и построение множеств C(x)
@@ -19,6 +20,7 @@ cxr-conformal-xai/
 ├── outputs/                          # Артефакты: predictions.csv, графики, примеры изображений
 ├── .gitignore                        # Исключения для Git
 ├── requirements.txt                  # Зафиксированные версии библиотек
+├── article_base.pdf                  # Черновик статьи
 └── README.md                         # Инструкция по установке и воспроизведению
 ```
 
@@ -58,7 +60,7 @@ person2_virus_4.jpeg,calib,2,0.1104,0.3241,0.5655
 IM-0145-0001.jpeg,test,0,0.9240,0.0410,0.0350
 person10_bacteria_42.jpeg,test,1,0.0150,0.7200,0.2650
 person15_virus_89.jpeg,test,2,0.0820,0.4430,0.4750
----
+```
 
 ## 🚀 Быстрый старт и установка
 
@@ -90,9 +92,8 @@ pip install -r requirements.txt
 
 > **Примечание по CUDA**: Для установки PyTorch с поддержкой вашей версии CUDA используйте инструкцию с [официального сайта PyTorch](https://pytorch.org/get-started/locally/).
 
----
 
-## 🔬 Пайплайн воспроизведения экспериментов
+## Недели 1-2: 🔬 Пайплайн воспроизведения экспериментов
 
 ### Шаг 1: Инференс базовой модели (Напарник)
 Откройте ноутбук [`notebooks/01_baseline_inference.ipynb`](file:///notebooks/01_baseline_inference.ipynb):
@@ -111,7 +112,6 @@ pip install -r requirements.txt
    - **Average Set Size**: средний размер предсказательного множества $|C(x)|$.
    - **Grad-CAM Alignment Score**: степень пространственного наложения карт внимания диагнозов, входящих в неоднозначные множества ($|C(x)| > 1$).
 
----
 
 ## 📊 Описание модулей в `src/`
 
@@ -129,7 +129,6 @@ pip install -r requirements.txt
   - `cam_conformal_alignment_score(...)`: метрика пространственного согласия / расхождения между Grad-CAM картами классов внутри предиктивного множества.
 
 
----
 
 ## 🔬 Неделя 3: Статистический анализ связки конформных множеств и Grad-CAM
 
