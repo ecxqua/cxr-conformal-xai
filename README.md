@@ -13,7 +13,7 @@ cxr-conformal-xai/
 │   ├── 02_conformal_calibration.ipynb # Зона Тимлида: Conformal Prediction (MAPIE) + XAI (Grad-CAM)
 │   ├── 011_grad_cam.ipynb # Формирование карт внимания Grad-CAM
 │   ├── 012_inference_table.ipynb # Инференс модели для формирования predictions.csv
-│   └── 03_statistical_analysis_week3.ipynb # Зона Тимлида: статистический анализ результатов
+│   └── 03_statistical_analysis_week3.ipynb # Зона Тимлида: статистический анализ результатов (НЕТ, НЕЙРОСЛОП)
 ├── outputs/                          # Артефакты: predictions.csv, графики, примеры изображений
 ├── .gitignore                        # Исключения для Git
 ├── requirements.txt                  # Зафиксированные версии библиотек
