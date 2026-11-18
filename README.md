@@ -1,6 +1,6 @@
 # CXR Conformal XAI (`cxr-conformal-xai`)
 
-Фреймворк для оценки неопределенности (Uncertainty Quantification) и объяснимого искусственного интеллекта (Explainable AI / Grad-CAM) в задачах анализа рентгенограмм органов грудной клетки (Chest X-Ray, CXR).
+Фреймворк для оценки неопределенности (Uncertainty Quantification) и объяснимого искусственного интеллекта (Explainable AI / Grad-CAM) в задачах анализа рентгенограмм органов грудной клетки (Chest X-Ray, CXR)
 
 ---
 
