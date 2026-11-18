@@ -12,11 +12,8 @@ cxr-conformal-xai/
 │   ├── 01_baseline_inference.ipynb   # Зона Напарника: ResNet + вычисление logits/вероятностей
 │   ├── 02_conformal_calibration.ipynb # Зона Тимлида: Conformal Prediction (MAPIE) + XAI (Grad-CAM)
 │   ├── 011_grad_cam.ipynb # Формирование карт внимания Grad-CAM
+│   ├── 012_inference_table.ipynb # Инференс модели для формирования predictions.csv
 │   └── 03_statistical_analysis_week3.ipynb # Зона Тимлида: статистический анализ результатов
-├── src/                              # Переиспользуемый код и модули
-│   ├── __init__.py
-│   ├── conformal.py                  # Калибровка non-conformity scores и построение множеств C(x)
-│   └── metrics.py                    # Coverage, средний размер множеств, связь с Grad-CAM
 ├── outputs/                          # Артефакты: predictions.csv, графики, примеры изображений
 ├── .gitignore                        # Исключения для Git
 ├── requirements.txt                  # Зафиксированные версии библиотек
@@ -91,70 +88,3 @@ pip install -r requirements.txt
 ```
 
 > **Примечание по CUDA**: Для установки PyTorch с поддержкой вашей версии CUDA используйте инструкцию с [официального сайта PyTorch](https://pytorch.org/get-started/locally/).
-
-
-## Недели 1-2: 🔬 Пайплайн воспроизведения экспериментов
-
-### Шаг 1: Инференс базовой модели (Напарник)
-Откройте ноутбук [`notebooks/01_baseline_inference.ipynb`](file:///notebooks/01_baseline_inference.ipynb):
-1. Загрузите рентгеновские снимки в папку `data/`.
-2. Запустите инференс предобученной модели ResNet / TorchXRayVision.
-3. Убедитесь, что файл с предсказаниями сохранен в `outputs/predictions.csv`.
-
-### Шаг 2: Конформная калибровка и XAI (Тимлид)
-Откройте ноутбук [`notebooks/02_conformal_calibration.ipynb`](file:///notebooks/02_conformal_calibration.ipynb):
-1. Загрузите полученные вероятности из `outputs/predictions.csv`.
-2. Разделите данные на калибровочную ($D_{cal}$) и тестовую ($D_{test}$) выборки.
-3. Рассчитайте калибровочный квантиль $\hat{q}$ для целевого уровня надежности $1 - \alpha$ (например, 90% при $\alpha = 0.1$).
-4. Постройте множества предсказаний $C(x)$.
-5. Оцените метрики:
-   - **Empirical Coverage**: фактическая доля покрытых истинных меток ($\ge 1 - \alpha$).
-   - **Average Set Size**: средний размер предсказательного множества $|C(x)|$.
-   - **Grad-CAM Alignment Score**: степень пространственного наложения карт внимания диагнозов, входящих в неоднозначные множества ($|C(x)| > 1$).
-
-
-## 📊 Описание модулей в `src/`
-
-- **`src.conformal`**:
-  - `compute_nonconformity_scores(probs, labels, method='lac')`: вычисление оценок несоответствия.
-  - `calibrate_threshold(scores, alpha=0.1)`: нахождение квантиля $\hat{q}$ с поправкой на конечную выборку.
-  - `predict_conformal_sets(probs, q_hat, method='lac')`: генерация предиктивных множеств $C(x)$.
-  - `evaluate_conformal_coverage(prediction_sets, true_labels)`: быстрая оценка покрытия и размера множеств.
-
-- **`src.metrics`**:
-  - `calculate_coverage(...)`: расчет покрытия выборки.
-  - `calculate_average_set_size(...)`: расчет средней кардинальности множеств.
-  - `calculate_set_size_distribution(...)`: частотное распределение размеров множеств.
-  - `conformal_classification_metrics(...)`: сводный отчет по всем ключевым метрикам калибровки.
-  - `cam_conformal_alignment_score(...)`: метрика пространственного согласия / расхождения между Grad-CAM картами классов внутри предиктивного множества.
-
-
-
-## 🔬 Неделя 3: Статистический анализ связки конформных множеств и Grad-CAM
-
-### Результаты статистической проверки гипотезы:
-1. **Сравнение площади внимания ($S_{\mathrm{CAM}}, \tau = 0.2$):**
-   - Группа $|C(x)| = 1$ (уверенный диагноз, $N = 524$): $0.6003 \pm 0.1951$ (медиана 0.6531)
-   - Группа $|C(x)| \ge 2$ (сомнительный диагноз, $N = 355$): $0.4917 \pm 0.2080$ (медиана 0.4898)
-   - **Абсолютная разница ($\Delta$):** $-0.1085$ (относительное изменение: **$-18.08\%$**)
-   - **Размер эффекта (Cohen's $d$):** $-0.5417$ (умеренный/выраженный эффект)
-   - **Критерий Уэлча (Welch's t-test):** $t = -7.7842, p = 2.42 \times 10^{-14}$
-   - **Критерий Манна-Уитни (Mann-Whitney U):** $U = 63086.5, p = 5.42 \times 10^{-16}$
-   - **Ранговая корреляция Спирмена:** $r_s = -0.2958, p = 3.26 \times 10^{-19}$
-
-2. **Сравнение нормализованной пространственной энтропии ($H_{\mathrm{norm}}$):**
-   - Группа $|C(x)| = 1$: $2.6648 \pm 0.1521$
-   - Группа $|C(x)| \ge 2$: $2.6165 \pm 0.1787$
-   - **Критерий Манна-Уитни:** $U = 62402.5, p = 1.16 \times 10^{-16}$
-   - **Ранговая корреляция Спирмена:** $r_s = -0.3024, p = 4.81 \times 10^{-20}$
-
-### Артефакты Недели 3:
-- Ноутбук анализа: [`notebooks/03_statistical_analysis_week3.ipynb`](notebooks/03_statistical_analysis_week3.ipynb)
-- Модуль статистической оценки: [`src/stats_evaluation.py`](src/stats_evaluation.py)
-- Датасет метрик: [`outputs/test_conformal_xai_metrics.csv`](outputs/test_conformal_xai_metrics.csv)
-- Сводный отчет в JSON: [`outputs/statistical_summary_week3.json`](outputs/statistical_summary_week3.json)
-- Графики публикации:
-  - [`outputs/figure1_attention_area_comparison.png`](outputs/figure1_attention_area_comparison.png) — боксплот площади внимания
-  - [`outputs/figure2_spatial_entropy_comparison.png`](outputs/figure2_spatial_entropy_comparison.png) — скрипичная диаграмма энтропии
-  - [`outputs/figure3_multiclass_trends.png`](outputs/figure3_multiclass_trends.png) — динамика по размерам множеств $|C(x)| \in \{1, 2, 3\}$
-  - [`outputs/figure4_clinical_cases_panel.png`](outputs/figure4_clinical_cases_panel.png) — клиническая панель кейсов
