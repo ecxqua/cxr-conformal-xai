@@ -21,6 +21,9 @@
 ## 🔬 Неделя 3: Статистический анализ связки конформных множеств и Grad-CAM
 
 ### Артефакты Недели 3:
+
+ДОРАБОТАТЬ! НЕЙРОСЛОП! ВЫВОДЫ НЕВЕРНЫЕ! ОПИРАЙТЕСЬ НА PDF!
+
 - Ноутбук анализа: [`notebooks/03_statistical_analysis_week3.ipynb`](notebooks/03_statistical_analysis_week3.ipynb)
 - Модуль статистической оценки: [`src/stats_evaluation.py`](src/stats_evaluation.py)
 - Датасет метрик: [`outputs/test_conformal_xai_metrics.csv`](outputs/test_conformal_xai_metrics.csv)
