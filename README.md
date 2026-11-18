@@ -18,6 +18,7 @@ cxr-conformal-xai/
 ├── .gitignore                        # Исключения для Git
 ├── requirements.txt                  # Зафиксированные версии библиотек
 ├── article_base.pdf                  # Черновик статьи
+├── DIARY.md                  # Дневник разработки
 └── README.md                         # Инструкция по установке и воспроизведению
 ```
 
